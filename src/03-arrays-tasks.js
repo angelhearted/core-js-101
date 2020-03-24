@@ -235,11 +235,8 @@ function toArrayOfSquares(arr) {
  *   [ 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 ] => [ 1, 3, 6, 10, 15, 21, 28, 36, 45, 55 ]
  */
 function getMovingSum(arr) {
-  const result = new Array(arr.length);
-  arr.forEach((v, i) => {
-    result[i] = v + (result[i - 1] || 0);
-  });
-  return result;
+  // bad algorythm, used only for obeying the task rules
+  return arr.map((v, i) => arr.slice(0, i + 1).reduce((s, v2) => s + v2));
 }
 
 /**
@@ -273,9 +270,7 @@ function getSecondItems(arr) {
  *  [ 1,2,3,4,5 ] => [ 1, 2,2, 3,3,3, 4,4,4,4, 5,5,5,5,5 ]
  */
 function propagateItemsByPositionIndex(arr) {
-  const result = [];
-  arr.forEach((v, i) => result.push(...new Array(i + 1).fill(v)));
-  return result;
+  return arr.map((v, i) => new Array(i + 1).fill(v)).reduce((a, v) => a.push(...v) && a, []);
 }
 
 
@@ -523,17 +518,9 @@ function distinct(arr) {
  *   }
  */
 function group(array, keySelector, valueSelector) {
-  const result = new Map();
-
-  array.forEach((v) => {
-    if (result.get(keySelector(v))) {
-      result.get(keySelector(v)).push(valueSelector(v));
-    } else {
-      result.set(keySelector(v), [valueSelector(v)]);
-    }
-  });
-
-  return result;
+  return array.reduce((m, v) => (m.get(keySelector(v))
+    ? m.get(keySelector(v)).push(valueSelector(v))
+    : m.set(keySelector(v), [valueSelector(v)])) && m, new Map());
 }
 
 
@@ -551,9 +538,7 @@ function group(array, keySelector, valueSelector) {
  *   ['one','two','three'], x=>x.split('')  =>   ['o','n','e','t','w','o','t','h','r','e','e']
  */
 function selectMany(arr, childrenSelector) {
-  const result = [];
-  arr.forEach((v) => result.push(...childrenSelector.call(null, v)));
-  return result;
+  return arr.map((v) => childrenSelector.call(null, v)).reduce((a, v) => a.push(...v) && a, []);
 }
 
 
