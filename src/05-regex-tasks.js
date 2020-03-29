@@ -12,7 +12,7 @@
 /**
  * Returns the regexp that matches a GUID string representation
  * '{XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX}',
- * where X is hexadecimal digit (0,1,2...,9,A,a,B,b,C,c,D,d,F,f)
+ * where X is hexadecimal digit (0,1,2...,9,A,a,B,b,C,c,D,d,E,e,F,f)
  *
  * See more details: https://en.wikipedia.org/wiki/Globally_unique_identifier
  *
@@ -32,7 +32,8 @@
  * @return {RegExp}
  */
 function getRegexForGuid() {
-  throw new Error('Not implemented');
+  const x = '[\\da-f]';
+  return new RegExp(`^{${x}{8}-${x}{4}-${x}{4}-${x}{4}-${x}{12}}$`, 'i');
 }
 
 
@@ -54,7 +55,7 @@ function getRegexForGuid() {
  *
  */
 function getRegexForPitSpot() {
-  throw new Error('Not implemented');
+  return /^[sr]|pit/;
 }
 
 
@@ -78,8 +79,8 @@ function getRegexForPitSpot() {
  *   'PASSW0RD'.match(validator)  => false
  *   'Pa55'.match(validator) => false
  */
-function getPasswordValidator(/* minLength */) {
-  throw new Error('Not implemented');
+function getPasswordValidator(minLength) {
+  return new RegExp(`^(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])[\\dA-Za-z]{${minLength},}$`);
 }
 
 
